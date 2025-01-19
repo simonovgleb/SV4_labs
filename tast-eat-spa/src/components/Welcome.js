@@ -12,7 +12,8 @@ export class Welcome extends React.Component {
                                 Welcome to Restaurant
                             </h2>
                             <h3 className="welcome__about lng-welcome-about">
-                                The people, food and the prime locations make the perfect place good friends &amp; family to come together and have great time.
+                                The people, food and the prime locations make the perfect place good friends &amp; family to
+                                come together and have great time.
                             </h3>
                             <button className="welcome__btn lng-welcome-btn btn__animation">
                                 View Menu
