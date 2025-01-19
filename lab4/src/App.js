@@ -1,25 +1,21 @@
-import logo from './logo.svg';
-import './App.css';
+// App.js
+import React from 'react';
+import { Routes, Route } from 'react-router-dom';
+import TodoList from './components/TodoList';
+import TodoItemEdit from './components/TodoItemEdit';  // форма редактирования
+import NotFound from './components/NotFound';          // 404, для примера
+import LanguageSwitcher from './components/LanguageSwitcher';
+import 'bootstrap/dist/css/bootstrap.min.css';
 
-function App() {
+export default function App() {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div>
+      <LanguageSwitcher></LanguageSwitcher>
+      <Routes>
+        <Route path="/" element={<TodoList />} />
+        <Route path="/edit/:id" element={<TodoItemEdit />} />
+        <Route path="*" element={<NotFound />} />
+      </Routes>
     </div>
   );
 }
-
-export default App;
