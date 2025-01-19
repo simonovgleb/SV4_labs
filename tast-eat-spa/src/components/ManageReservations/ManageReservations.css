@@ -1,0 +1,180 @@
+/* ManageReservations.css */
+.manage-reservations {
+    padding: 2rem;
+    font-family: "Playfair Display", Georgia, serif;
+    max-width: 90%;
+    margin: 0 auto;
+    color: #5D4037;
+    background-color: #FFFDD0;
+    transition: background-color 0.3s ease;
+}
+
+.manage-reservations h2 {
+    text-align: center;
+    font-size: 2.8rem;
+    margin-bottom: 2rem;
+    font-weight: bold;
+}
+
+.manage-reservations .form-container {
+    margin-bottom: 3rem;
+    padding: 2rem;
+    border: 0.125rem solid #D4AF37;
+    border-radius: 0.5rem;
+    background-color: #FAF3E0;
+    box-shadow: 0 0.4rem 0.6rem rgba(0, 0, 0, 0.1);
+    transition: box-shadow 0.3s ease;
+}
+
+.manage-reservations .form-container:hover {
+    box-shadow: 0 0.6rem 1rem rgba(0, 0, 0, 0.15);
+}
+
+.manage-reservations .form-container input {
+    width: 100%;
+    padding: 0.625rem;
+    margin: 0.625rem 0;
+    border-radius: 0.25rem;
+    border: 0.125rem solid #D4AF37;
+    font-size: 1rem;
+    font-family: inherit;
+}
+
+.manage-reservations .form-container button {
+    padding: 0.625rem 1.25rem;
+    margin-top: 0.625rem;
+    background-color: #D4AF37;
+    color: #fff;
+    border: none;
+    border-radius: 0.25rem;
+    cursor: pointer;
+    font-size: 1rem;
+    font-weight: bold;
+    box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.2);
+    transition: background-color 0.3s ease;
+}
+
+.manage-reservations .form-container button:hover {
+    background-color: #b38f2f;
+}
+
+.manage-reservations .reservations-list h3 {
+    font-size: 1.8rem;
+    margin: 2rem 0 1rem;
+}
+
+.manage-reservations table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 1.25rem;
+    background-color: #fff;
+}
+
+.manage-reservations th,
+.manage-reservations td {
+    border-bottom: 0.0625rem solid #eee;
+    padding: 0.625rem;
+    text-align: left;
+}
+
+.manage-reservations th {
+    border-bottom: 0.125rem solid #D4AF37;
+    font-weight: bold;
+}
+
+.manage-reservations tr:hover {
+    background-color: #f1f1f1;
+    transition: background-color 0.3s ease;
+}
+
+.manage-reservations .actionButton {
+    margin-right: 0.3125rem;
+    padding: 0.3125rem 0.625rem;
+    border: none;
+    border-radius: 0.25rem;
+    cursor: pointer;
+    font-weight: bold;
+    transition: transform 0.2s, background-color 0.3s;
+}
+
+.manage-reservations .viewButton {
+    background-color: #A67C52;
+    color: #fff;
+}
+
+.manage-reservations .editButton {
+    background-color: #C8AD7F;
+    color: #fff;
+}
+
+.manage-reservations .actionButton:hover {
+    transform: scale(1.05);
+}
+
+.manage-reservations .deleteButton {
+    padding: 0.625rem 1.25rem;
+    margin-top: 1.25rem;
+    background-color: #8B4513;
+    color: #fff;
+    border: none;
+    border-radius: 0.25rem;
+    cursor: pointer;
+    font-size: 1rem;
+    font-weight: bold;
+    transition: background-color 0.3s ease;
+}
+
+.manage-reservations .deleteButton:disabled {
+    background-color: #ccc;
+    cursor: not-allowed;
+}
+
+.manage-reservations .deleteButton:hover:not(:disabled) {
+    background-color: #A0522D;
+}
+
+.manage-reservations .modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+}
+
+.manage-reservations .modal-content {
+    background-color: #fff;
+    padding: 1.25rem;
+    border-radius: 0.5rem;
+    width: 90%;
+    max-width: 31.25rem;
+    box-shadow: 0 0.25rem 0.5rem rgba(0, 0, 0, 0.26);
+    animation: fadeIn 0.3s ease-out;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: scale(0.95);
+    }
+
+    to {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+/* Адаптивные стили */
+@media (max-width: 768px) {
+    .manage-reservations h2 {
+        font-size: 2.2rem;
+    }
+
+    .manage-reservations .subheading {
+        font-size: 1.5rem;
+    }
+}
