@@ -1,0 +1,200 @@
+@media screen and (max-width: 1000px) {
+
+    .header__preview__image {
+        display: none;
+    }
+
+    .header__navbar {
+        column-gap: 30px;
+    }
+
+    .header__btn:nth-child(5) {
+        padding-left: 0px;
+    }
+
+    .welcome__right__image {
+        display: none;
+    }
+
+    .welcome {
+        height: 400px;
+    }
+
+    .welcome__content {
+        flex-direction: column;
+        align-items: center;
+        justify-content: flex-start;
+    }
+
+    .welcome__title,
+    .welcome__about {
+        text-align: center;
+    }
+
+    .welcome__btn {
+        margin: 0 auto;
+    }
+
+    .welcome__title {
+        font-size: 62px;
+    }
+
+    .mini__info__content {
+        flex-direction: column;
+        column-gap: 0;
+        justify-content: space-between;
+        row-gap: 10px;
+        align-items: center;
+        height: 500px;
+        padding-bottom: 10px;
+    }
+
+    .mini__info__item {
+        max-width: 70%;
+        width: 100%;
+    }
+
+    .dishes__content {
+        flex-direction: column;
+    }
+
+    .dishes__left__image {
+        width: 100%;
+    }
+
+    .offers__content {
+        width: 100%;
+    }
+
+    .offers__cards {
+        width: 100%;
+        grid-template-columns: 1fr;
+        display: grid;
+        grid-row-gap: 40px;
+    }
+
+
+    .offers__card {
+        width: 100%;
+    }
+
+
+    .footer__main {
+        flex-direction: column;
+        align-items: center;
+        column-gap: 40px;
+        row-gap: 40px;
+    }
+
+    .footer__main__element {
+        display: flex;
+        column-gap: 20px;
+    }
+
+    .footer__main__element__subtitle {
+        margin-top: 0px;
+        font-weight: 400;
+        font-size: 20px;
+        line-height: 150%;
+        letter-spacing: 0.01em;
+        white-space: nowrap;
+        color: #fff;
+        font-family: 'Josefin Sans', sans-serif;
+    }
+
+    .footer__main__element__email {
+        font-family: 'Josefin Sans', sans-serif;
+        font-weight: 400;
+        font-size: 19px;
+        line-height: 158%;
+        white-space: nowrap;
+        letter-spacing: 0.01em;
+        color: #e1b168;
+
+    }
+
+    .footer__main__element__tel {
+        font-family: 'Josefin Sans', sans-serif;
+        font-weight: 400;
+        font-size: 19px;
+        line-height: 158%;
+        white-space: nowrap;
+        letter-spacing: 0.01em;
+        color: #e1b168;
+    }
+
+    .footer__working__hours {
+        display: none;
+    }
+
+    .footer__titles__element:nth-child(2) {
+        transform: translateX(0px);
+    }
+
+    .footer__main__element__title {
+        text-align: center;
+        margin-bottom: 20px;
+    }
+}
+
+@media screen and (max-width: 850px) {
+
+
+    .header__navbar {
+        column-gap: 15px;
+    }
+
+}
+
+
+@media screen and (max-width: 1100px) {
+    .dish__element__about {
+        white-space: wrap;
+        margin-bottom: 0;
+    }
+
+    .we__offer__content {
+        flex-direction: column;
+    }
+}
+
+@media screen and (max-width: 1400px) {
+    .popular__cards {
+        display: grid;
+        grid-row-gap: 40px;
+    }
+
+    .popular__card__image {
+        width: 100%;
+    }
+}
+
+
+
+@media  screen and (max-width: 740px) {
+    .customer__rate__card  {
+        min-width: 444px;
+    }
+}
+
+@media  screen and (max-width: 540px) {
+    .customer__rate__card  {
+        min-width:254px;
+        padding: 0px 10px;  
+    } 
+    .customer__rate__card__bio { 
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+    }
+    .customer__rate__card__bio__text { 
+        text-align: center;
+    }
+    .customer__rate__card__comment { 
+        max-width: 250px;
+    }
+    .slider-track {
+        column-gap: 10px;
+    }
+}
+ 
