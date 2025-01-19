@@ -1,5 +1,6 @@
 // src/components/Header.js
 import React from 'react';
+import { Link } from 'react-router-dom';
 
 export class Header extends React.Component {
   render() {
@@ -17,26 +18,19 @@ export class Header extends React.Component {
               <a href="./#book-table" className="lng-reservation">Reservation</a>
             </div>
           </div>
+
+          {/* Обновлённая навигация */}
           <div className="navbar__container">
             <nav>
               <ul className="header__navbar">
                 <li className="header__btn">
-                  <a href="./index.html" className="lng-home">Home</a>
+                  <Link to="/" className="lng-home">Home</Link>
                 </li>
                 <li className="header__btn">
-                  <a href="#mini__info" className="header__btn__link lng-about__us">About Us</a>
+                  <Link to="/manage-dishes" className="lng-manage-dishes">Manage Dishes</Link>
                 </li>
                 <li className="header__btn">
-                  <a href="#dishes" className="header__btn__link lng-menu">Our Menu</a>
-                </li>
-                <li className="header__btn">
-                  <a href="#" className="header__btn__link lng-burger-pages">Pages</a>
-                </li>
-                <li className="header__btn">
-                  <a href="#blog" className="header__btn__link lng-blog">Blog</a>
-                </li>
-                <li className="header__btn">
-                  <a href="#footer" className="header__btn__link lng-contact">Contact Us</a>
+                  <Link to="/manage-reservations" className="lng-manage-reservations">Manage Reservations</Link>
                 </li>
               </ul>
             </nav>
@@ -57,40 +51,19 @@ export class Header extends React.Component {
           </div>
         </div>
 
+        {/* Упрощённое содержимое бургер-меню */}
         <aside className="burger__content">
           <img src="./static/LOGO.png" alt="logo" className="burger__logo" />
           <div className="burger__btns">
             <div className="burger__btn">
               <img src="./static/header/home.png" className="burger__btn__img" alt="home" />
-              <a href="./index.html" className="lng-home">Home</a>
+              <Link to="/" className="lng-home">Home</Link>
             </div>
             <div className="burger__btn">
-              <img src="./static/header/information.png" className="burger__btn__img" alt="about us" />
-              <a href="#mini__info" className="lng-about__us">About Us</a>
+              <img src="./static/header/dishes.png" className="burger__btn__img" alt="manage dishes" />
+              <Link to="/manage-dishes" className="lng-manage-dishes">Manage Dishes</Link>
             </div>
-            <div className="burger__btn">
-              <img src="./static/header/burger.png" className="burger__btn__img" alt="our menu" />
-              <a href="#dishes" className="lng-burger-menu">Our Menu</a>
-            </div>
-            <div className="burger__btn">
-              <img src="./static/header/web-browser.png" className="burger__btn__img" alt="pages" />
-              <a href="#" className="lng-burger-pages">Pages</a>
-            </div>
-            <div className="burger__btn">
-              <img src="./static/header/paper.png" className="burger__btn__img" alt="blog" />
-              <a href="#blog" className="lng-burger-blog">Blog</a>
-            </div>
-            <div className="burger__btn">
-              <img src="./static/header/contact-us.png" className="burger__btn__img" alt="contact us" />
-              <a href="#footer" className="lng-burger-contact">Contact Us</a>
-            </div>
-            <div className="burger__btn">
-              <img src="./static/header/phone.png" className="burger__btn__img" alt="call" />
-              <a href="tel:1234" className="lng-burger-tel">Call - 123 456 789</a>
-            </div>
-            <div className="burger__btn">
-              <a href="./#book-table" className="lng-burger-reservation">Reservation</a>
-            </div>
+            {/* Остальные кнопки удалены или закомментированы */}
           </div>
           <div className="header__navbar__networks">
             <img src="./static/inst.png" alt="social network" className="header__network" />
