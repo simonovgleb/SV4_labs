@@ -1,26 +1,29 @@
 // src/App.js
 import React from 'react';
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+
 import { Header } from './components/Header';
-import { Welcome } from './components/Welcome';
-import { MiniInfo } from './components/MiniInfo';
-import { Dishes } from './components/Dishes';
-import { Blog } from './components/Blog';
 import { Footer } from './components/Footer';
+import { Homepage } from './components/Homepage';
+import { ManageDishes } from './components/ManageDishes/ManageDishes';
+import { ManageReservations } from './components/ManageReservations/ManageReservations';
 
 class App extends React.Component {
   render() {
     return (
-      <div className="page__wrapper">
-        <Header />
-        <main className="content__of__page">
-          <Welcome />
-          <MiniInfo />
-          <Dishes />
-          <Blog />
-          {/* Другие секции по необходимости */}
-        </main>
-        <Footer />
-      </div>
+      <Router>
+        <div className="page__wrapper">
+          <Header />
+          <main className="content__of__page">
+            <Routes>
+              <Route path="/" element={<Homepage />} />
+              <Route path="/manage-dishes" element={<ManageDishes />} />
+              <Route path="/manage-reservations" element={<ManageReservations />} />
+            </Routes>
+          </main>
+          <Footer />
+        </div>
+      </Router>
     );
   }
 }
