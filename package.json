@@ -1,0 +1,13 @@
+{
+  "name": "my-app",
+  "version": "1.0.0",
+  "description": "Пример приложения на Node.js с FS, Streams и child_process.spawn",
+  "main": "index.js",
+  "scripts": {
+    "start": "node ./src/fs/create.js",
+    "test": "echo \"No tests yet\""
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC"
+}
