@@ -1,0 +1,129 @@
+.orders__container {
+    display: flex;
+    flex-direction: column;
+    border: 1px solid #AAAAAA;
+    margin-left: 7rem;
+    margin-right: 7rem;
+    margin-top: 5rem;
+    padding: 2.75rem;
+    row-gap: 2.5rem;
+    font-family: 'Cormorant Infant';
+    font-style: normal;
+    font-weight: 400;
+    line-height: 140%;
+    text-align: left;
+    letter-spacing: 0.2px;
+    color: var(--white-color);
+}
+
+.orders__user_box {
+    display: flex;
+    flex-direction: row;
+    border: 1px solid #AAAAAA;
+    padding: 1rem;
+    column-gap: 1rem;
+    max-height: 10rem;
+}
+
+.orders__user_info {
+    display: flex;
+    flex-direction: column;
+    border: 1px solid #AAAAAA;
+    padding: 0.625rem;
+    row-gap: 0.5rem;
+    min-width: 25%;
+}
+
+.orders__text_title {
+    font-size: 1.875rem;
+    text-align: center;
+}
+
+.orders__text_regular {
+    font-size: 1rem;
+}
+
+.orders__order_list {
+    border: 1px solid #AAAAAA;
+    padding: 0.625rem;
+    display: flex;
+    row-gap: 0.3rem;
+    flex-grow: 1;
+    flex-flow: row wrap;
+    overflow-y: auto;
+}
+
+.orders__summary {
+    margin-right: 0;
+    margin-left: auto;
+    padding: 0.625rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    border: 1px solid #AAAAAA;
+    min-width: 30%;
+}
+
+.orders__order_row {
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+    column-gap: 1.75rem;
+    margin-right: 1.5rem;
+    height: fit-content;
+    border-bottom: 1px solid var(--white-color);
+}
+
+.orders__summary_section {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    row-gap: 0.75rem;
+}
+
+@media screen and (max-width: 768px) {
+    .orders__container {
+        padding: 1rem;
+    }
+
+    .orders__text_title {
+        font-size: 1rem;
+    }
+
+    .orders__text_regular {
+        font-size: 0.75rem;
+    }
+
+    .orders__user_info {
+        min-width: 35%;
+    }
+
+    .orders__summary {
+        min-width: 25%;
+    }
+}
+
+@media screen and (max-width: 320px) {
+    .orders__container {
+        margin-left: 1rem;
+        margin-right: 1rem;
+        padding: 0.3rem;
+    }
+
+    .orders__text_title {
+        font-size: 0.75rem;
+    }
+
+    .orders__text_regular {
+        font-size: 0.5rem;
+    }
+
+    .orders__summary {
+        padding: 0.1rem;
+        justify-content: space-around;
+    }
+
+    .orders__summary_section {
+        row-gap: 0.1rem;
+    }
+}

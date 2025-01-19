@@ -1,0 +1,231 @@
+:root[theme='dark'] {
+    color-scheme: dark;
+}
+
+:root[theme='dark'] * .form__username__image {
+    filter: contrast(0);
+}
+
+.auth__form {
+    width: 100%;
+    margin-top: 200px;
+    position: relative;
+  
+}
+.auth__form__content {
+    width: 100%;
+    padding-left: 40px;
+    padding-right: 40px;
+    max-width: 800px;
+    margin: 0 auto;
+}
+.auth__form__title {
+    position: relative;
+    display: inline;
+    font-weight: 400;
+    font-size: 15px;
+    line-height: 140%; 
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    font-family: 'Josefin Sans', sans-serif;
+    color: var(--white-color);
+    margin-left: 15rem;
+    margin-right: auto;
+}
+
+
+.auth__form__title::before {
+    content: "";
+    background-color: #E1B168;
+    width: 100%;
+    position: absolute;
+    height: 1px;
+    top: 0;
+    left: 0;
+    transform: translateY(-6.7px);
+    top: 0;
+    left: 0
+}
+
+.auth__form__title::after {
+    content: "";
+    background-color: #E1B168;
+    width: 100%;
+    position: absolute;
+    height: 1px;
+    bottom: 0;
+    left: 0;
+    transform: translateY(6.7px);
+    left: 0;
+    bottom: 0;
+    font-family: 'Josefin Sans', sans-serif;
+}
+
+.auth__form__inputs {
+    display: flex;
+    flex-direction: column;
+    row-gap: 20px;
+    margin-top: 40px;
+}
+
+.form__element {
+    display: flex;
+    flex-direction: column;
+    position: relative;
+}
+
+
+.form__username__image {
+    width: 30px;
+    height: 30px;
+    position: absolute;
+    left: 29rem;
+    transform: translateY(5px);
+    filter: contrast(1);
+}
+
+
+.form__username__image:hover {
+    cursor: pointer;
+}
+
+.form__username__input {
+    height: 40px;
+    width: 32rem;
+    outline: none;
+    padding-left: 20px;
+    font-family: 'Josefin Sans', sans-serif;
+    font-weight: 400;
+    font-size: 20px;
+    line-height: 150%;
+    background: var(--black-color);
+    border: var(--white-color) 1px solid;
+    color: var(--white-color);
+}
+
+.form__username__input:invalid {
+    border-color: red;
+}
+
+.form__username__input:disabled {
+    opacity: 0.5;
+}
+
+.auth__form__inputs:invalid .auth__form__submit,
+.auth__form__inputs:invalid .sign__in__button {
+    pointer-events: none;
+    opacity: 0.5;
+}
+
+.auth__form__submit, .sign__in__button {
+    margin-top: 20px;
+    height: 53px;
+    margin-left: 10rem;
+    width: 15rem;
+    margin-right: auto;
+    background-color: #E1B168;
+    color: var(--black-color);
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 400;
+    font-size: 22px;
+    line-height: 150%;
+    letter-spacing: 0.02em;
+    text-align: center;
+    font-family: 'Josefin Sans', sans-serif;
+    cursor: pointer;
+}
+
+.orHave {
+    text-align: center;
+    color: var(--white-color);
+    font-family: 'Josefin Sans', sans-serif;
+    font-weight: 400;
+    font-size: 20px;
+    line-height: 150%;
+    cursor: pointer;
+    margin-left: 12rem;
+    margin-right: auto;
+}
+
+
+.burger__content {
+    display: none;
+} 
+
+.form__email__input__error, .form__password__input__error, .form__user__input__error {
+    display: none;
+    color: rgba(255, 0, 0, 0.644);
+    font-family: 'Josefin Sans', sans-serif;
+    font-weight: 400;
+    font-size: 20px;
+    text-align: center;
+    margin-top: 10px;
+}
+
+.tooltip {
+    position: relative;
+    display: inline-block;
+    border-bottom: 1px dotted var(--white-color);
+}
+
+.tooltip .tooltip__text {
+    visibility: hidden;
+    background-color: var(--black-color);
+    color: var(--white-color);
+    text-align: center;
+    border-radius: 6px;
+    position: absolute;
+    top: 2rem;
+    left: 0;
+    z-index: 1;
+    font-family: 'Josefin Sans', sans-serif;
+    font-weight: 400;
+    font-size: 1rem;
+}
+
+.suggest__btn {
+    font-family: 'Josefin Sans', sans-serif;
+    font-weight: 600;
+    font-size: 1.5rem;
+    position: absolute;
+    right: auto;
+    left: 27rem;
+    top: 0.5rem;
+    bottom: 0.5rem;
+}
+
+.suggest__btn:hover {
+    cursor: pointer;
+}
+
+.tooltip:hover .tooltip__text {
+    visibility: visible;
+}
+
+.suggest__nickname {
+    left: 29rem;
+}
+
+.date__input {
+    padding-right: 1rem;
+    color: #757575;
+}
+
+.tos__container {
+    display: flex;
+    flex-direction: row;
+    font-family: 'Josefin Sans', sans-serif;
+    font-weight: 400;
+    font-size: 1rem;
+    flex-wrap: wrap;
+    align-items: baseline;
+    justify-content: flex-start;
+    column-gap: 1rem;
+}
+
+.tos__checkbox:invalid {
+    outline: 1px solid red;
+}
