@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="ru">
+
+<head>
+    <meta charset="UTF-8" />
+    <title>Система голосования</title>
+    <script>
+        // Функция для загрузки вариантов голосования
+        async function loadVariants() {
+            try {
+                const response = await fetch('/variants');
+                if (!response.ok) {
+                    throw new Error('Ошибка загрузки вариантов');
+                }
+                const variants = await response.json();
+                const variantsContainer = document.getElementById('variantsContainer');
+                variantsContainer.innerHTML = '';
+
+                variants.forEach(variant => {
+                    const label = document.createElement('label');
+                    const radio = document.createElement('input');
+                    radio.type = 'radio';
+                    radio.name = 'voteVariant';
+                    radio.value = variant.id;
+                    label.appendChild(radio);
+                    label.append(` Вариант ${variant.name}`);
+                    variantsContainer.appendChild(label);
+                    variantsContainer.appendChild(document.createElement('br'));
+                });
+            } catch (error) {
+                console.error(error);
+            }
+        }
+
+        // Функция для загрузки статистики
+        async function loadStats() {
+            try {
+                const response = await fetch('/stat', {
+                    method: 'POST'
+                });
+                if (!response.ok) {
+                    throw new Error('Ошибка загрузки статистики');
+                }
+                const stats = await response.json();
+                renderStats(stats);
+            } catch (error) {
+                console.error(error);
+            }
+        }
+
+        // Отображение статистики в HTML
+        function renderStats(stats) {
+            const statsContainer = document.getElementById('statsContainer');
+            statsContainer.innerHTML = '';
+            stats.forEach(item => {
+                const p = document.createElement('p');
+                p.textContent = `Вариант #${item.id}: ${item.votes} голосов`;
+                statsContainer.appendChild(p);
+            });
+        }
+
+        // Функция для отправки голоса
+        async function sendVote() {
+            const checkedRadio = document.querySelector('input[name="voteVariant"]:checked');
+            if (!checkedRadio) {
+                alert('Выберите вариант для голосования!');
+                return;
+            }
+            const variantId = checkedRadio.value;
+
+            try {
+                const response = await fetch('/vote', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ variantId })
+                });
+
+                if (!response.ok) {
+                    throw new Error('Ошибка при отправке голоса');
+                }
+
+                const data = await response.json();
+                if (data.error) {
+                    alert('Ошибка: ' + data.error);
+                } else {
+                    alert(data.message);
+                    // Обновляем статистику
+                    renderStats(data.stats);
+                }
+
+                // Снимаем выделение радио-кнопок (очистка)
+                const radios = document.getElementsByName('voteVariant');
+                radios.forEach(r => r.checked = false);
+
+            } catch (error) {
+                console.error(error);
+            }
+        }
+
+        // Функция для отмены последнего голоса
+        async function cancelLastVote() {
+            try {
+                const response = await fetch('/cancel', {
+                    method: 'DELETE'
+                });
+                if (!response.ok) {
+                    throw new Error('Ошибка при отмене голоса');
+                }
+
+                const data = await response.json();
+                if (data.error) {
+                    alert('Ошибка: ' + data.error);
+                } else {
+                    alert(data.message);
+                    renderStats(data.stats);
+                }
+            } catch (error) {
+                console.error(error);
+            }
+        }
+
+        // Функция для скачивания файла в указанном формате
+        // Можно реализовать через ссылки с разными Accept-заголовками
+        async function downloadResults(format) {
+            let headers = {};
+            if (format === 'xml') {
+                headers = { 'Accept': 'application/xml' };
+            } else if (format === 'html') {
+                headers = { 'Accept': 'text/html' };
+            } else {
+                // По умолчанию JSON
+                headers = { 'Accept': 'application/json' };
+            }
+
+            try {
+                const response = await fetch('/download', { headers });
+                if (!response.ok) {
+                    throw new Error('Ошибка при загрузке файла');
+                }
+
+                // Считываем тело ответа
+                const blob = await response.blob();
+
+                // Определяем тип для имени файла
+                let extension = format;
+                if (format === 'xml') {
+                    extension = 'xml';
+                } else if (format === 'html') {
+                    extension = 'html';
+                } else {
+                    extension = 'json';
+                }
+
+                // Формируем временный URL и скачиваем
+                const url = window.URL.createObjectURL(blob);
+                const link = document.createElement('a');
+                link.href = url;
+                link.download = `results.${extension}`;
+                document.body.appendChild(link);
+                link.click();
+                document.body.removeChild(link);
+                window.URL.revokeObjectURL(url);
+
+            } catch (error) {
+                console.error(error);
+            }
+        }
+
+        // При загрузке страницы
+        window.addEventListener('DOMContentLoaded', () => {
+            loadVariants();
+            loadStats();
+        });
+    </script>
+</head>
+
+<body>
+    <h1>Система голосования</h1>
+
+    <div id="variantsContainer">
+        Загрузка вариантов...
+    </div>
+
+    <button onclick="sendVote()">Голосовать</button>
+    <button onclick="cancelLastVote()">Отменить последний голос</button>
+
+    <hr>
+
+    <h2>Текущая статистика</h2>
+    <div id="statsContainer">
+        Загрузка статистики...
+    </div>
+
+    <hr>
+
+    <h2>Скачать результаты:</h2>
+    <button onclick="downloadResults('xml')">XML</button>
+    <button onclick="downloadResults('html')">HTML</button>
+    <button onclick="downloadResults('json')">JSON</button>
+
+</body>
+
+</html>
