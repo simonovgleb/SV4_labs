@@ -1,0 +1,12 @@
+{
+    "todos": {
+        "title": "Todo List",
+        "addButton": "Add",
+        "editButton": "Edit",
+        "deleteButton": "Delete",
+        "emptyNameError": "Task title cannot be empty."
+    },
+    "common": {
+        "notFound": "Page not found"
+    }
+}
