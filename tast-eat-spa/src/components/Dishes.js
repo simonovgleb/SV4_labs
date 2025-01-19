@@ -28,10 +28,27 @@ export class Dishes extends React.Component {
                                     Starters
                                 </p>
                                 <div className="dishes__elements">
-                                    {/* Здесь можно динамически рендерить список блюд */}
+                                    {/* Здесь можно динамически рендерить список блюд для раздела Starters */}
                                 </div>
                             </div>
-                            {/* Остальные блоки для Main Dish и Desert */}
+
+                            <div className="dishes__right__item">
+                                <p className="dishes__right__title lng-dishes__right__title2">
+                                    Main Dish
+                                </p>
+                                <div className="dishes__elements">
+                                    {/* Здесь можно динамически рендерить список блюд для раздела Main Dish */}
+                                </div>
+                            </div>
+
+                            <div className="dishes__right__item">
+                                <p className="dishes__right__title lng-dishes__right__title3">
+                                    Desert
+                                </p>
+                                <div className="dishes__elements">
+                                    {/* Здесь можно динамически рендерить список блюд для раздела Desert */}
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
