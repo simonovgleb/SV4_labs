@@ -1,10 +1,10 @@
 // src/components/Header.js
 import React from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import 'bootstrap/dist/css/bootstrap.min.css'; // <-- Импорт Bootstrap
+import { Link, NavLink, useNavigate } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import { logout } from '../store/authSlice';
 import { toast } from 'react-toastify';
-import { NavLink } from 'react-router-dom';
 
 // React-icons
 import {
@@ -12,14 +12,15 @@ import {
     FaHome,
     FaUserPlus,
     FaUserLock,
-    FaCashRegister
+    FaCashRegister,
 } from 'react-icons/fa';
 
 const Header = () => {
-    const activeStyle = { fontWeight: 'bold', textDecoration: 'underline' };
     const dispatch = useDispatch();
     const navigate = useNavigate();
     const { user, token } = useSelector((state) => state.auth);
+
+    const activeStyle = { fontWeight: 'bold', textDecoration: 'underline' };
 
     const handleLogout = () => {
         dispatch(logout());
@@ -28,78 +29,151 @@ const Header = () => {
     };
 
     return (
-        <nav>
-            <div>
-                {/* Бренд и логотип */}
-                <Link to="/">
-                    <FaHome />
+        <nav className="navbar navbar-expand-lg navbar-light bg-light">
+            <div className="container-fluid">
+                {/* Лого / Бренд */}
+                <Link to="/" className="navbar-brand d-flex align-items-center">
+                    <FaHome className="me-1" />
                     SAPE
                 </Link>
 
+                {/* Кнопка "гамбургер" для мобильных устройств */}
+                <button
+                    className="navbar-toggler"
+                    type="button"
+                    data-bs-toggle="collapse"
+                    data-bs-target="#navbarNav"
+                    aria-controls="navbarNav"
+                    aria-expanded="false"
+                    aria-label="Toggle navigation"
+                >
+                    <span className="navbar-toggler-icon"></span>
+                </button>
+
                 {/* Основной блок навигации */}
-                <div>
-                    <ul>
-                        {/* Если нет token, значит пользователь не авторизован */}
+                <div className="collapse navbar-collapse" id="navbarNav">
+                    <ul className="navbar-nav ms-auto">
+                        {/* Если нет токена, значит пользователь не авторизован */}
                         {!token ? (
                             <>
-                                <li>
-                                    <Link to="/register">
-                                        <FaUserPlus />
+                                <li className="nav-item">
+                                    <NavLink
+                                        to="/register"
+                                        className="nav-link"
+                                        style={({ isActive }) =>
+                                            isActive ? activeStyle : undefined
+                                        }
+                                    >
+                                        <FaUserPlus className="me-1" />
                                         Регистрация пользователя
-                                    </Link>
+                                    </NavLink>
                                 </li>
-                                <li>
-                                    <Link to="/admin-register">
-                                        <FaCashRegister />
+
+                                <li className="nav-item">
+                                    <NavLink
+                                        to="/admin-register"
+                                        className="nav-link"
+                                        style={({ isActive }) =>
+                                            isActive ? activeStyle : undefined
+                                        }
+                                    >
+                                        <FaCashRegister className="me-1" />
                                         Регистрация администратора
-                                    </Link>
+                                    </NavLink>
                                 </li>
-                                <li>
-                                    <Link to="/login">
-                                        <FaUserLock />
+
+                                <li className="nav-item">
+                                    <NavLink
+                                        to="/login"
+                                        className="nav-link"
+                                        style={({ isActive }) =>
+                                            isActive ? activeStyle : undefined
+                                        }
+                                    >
+                                        <FaUserLock className="me-1" />
                                         Авторизация
-                                    </Link>
+                                    </NavLink>
                                 </li>
                             </>
                         ) : (
                             <>
-                                <li>
-                                    <NavLink to="/employees" style={({ isActive }) => isActive ? activeStyle : undefined}>
+                                {/* Ссылки, доступные только авторизованным */}
+                                <li className="nav-item">
+                                    <NavLink
+                                        to="/employees"
+                                        className="nav-link"
+                                        style={({ isActive }) =>
+                                            isActive ? activeStyle : undefined
+                                        }
+                                    >
                                         Сотрудники
                                     </NavLink>
                                 </li>
-                                <li>
-                                    <NavLink to="/departments" style={({ isActive }) => isActive ? activeStyle : undefined}>
+                                <li className="nav-item">
+                                    <NavLink
+                                        to="/departments"
+                                        className="nav-link"
+                                        style={({ isActive }) =>
+                                            isActive ? activeStyle : undefined
+                                        }
+                                    >
                                         Отделы
                                     </NavLink>
                                 </li>
-                                <li>
-                                    <NavLink to="/contracts" style={({ isActive }) => isActive ? activeStyle : undefined}>
+                                <li className="nav-item">
+                                    <NavLink
+                                        to="/contracts"
+                                        className="nav-link"
+                                        style={({ isActive }) =>
+                                            isActive ? activeStyle : undefined
+                                        }
+                                    >
                                         Договора
                                     </NavLink>
                                 </li>
-                                <li>
-                                    <NavLink to="/deliveries" style={({ isActive }) => isActive ? activeStyle : undefined}>
+                                <li className="nav-item">
+                                    <NavLink
+                                        to="/deliveries"
+                                        className="nav-link"
+                                        style={({ isActive }) =>
+                                            isActive ? activeStyle : undefined
+                                        }
+                                    >
                                         Поставки
                                     </NavLink>
                                 </li>
-                                <li>
-                                    <NavLink to="/organizations" style={({ isActive }) => isActive ? activeStyle : undefined}>
+                                <li className="nav-item">
+                                    <NavLink
+                                        to="/organizations"
+                                        className="nav-link"
+                                        style={({ isActive }) =>
+                                            isActive ? activeStyle : undefined
+                                        }
+                                    >
                                         Организации
                                     </NavLink>
                                 </li>
 
+                                {/* Сменить пароль */}
+                                <li className="nav-item">
+                                    <NavLink
+                                        to="/change-password"
+                                        className="nav-link"
+                                        style={({ isActive }) =>
+                                            isActive ? activeStyle : undefined
+                                        }
+                                    >
+                                        Сменить пароль
+                                    </NavLink>
+                                </li>
+
                                 {/* Кнопка «Выйти» */}
-                                <li>
-                                    <button>
-                                        <li>
-                                            <NavLink to="/change-password" style={({ isActive }) => isActive ? activeStyle : undefined}>
-                                                Сменить пароль
-                                            </NavLink>
-                                        </li>
-                                    </button>
-                                    <button onClick={handleLogout}>
-                                        <FaSignOutAlt />
+                                <li className="nav-item">
+                                    <button
+                                        className="btn btn-outline-danger ms-2"
+                                        onClick={handleLogout}
+                                    >
+                                        <FaSignOutAlt className="me-1" />
                                         Выйти
                                     </button>
                                 </li>

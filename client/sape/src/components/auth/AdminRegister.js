@@ -4,6 +4,7 @@ import { registerAdmin } from '../../store/authSlice';
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { FaUserShield, FaLock, FaUserPlus } from 'react-icons/fa';
+import 'bootstrap/dist/css/bootstrap.min.css'; // Подключение Bootstrap стилей
 
 const AdminRegister = () => {
   const dispatch = useDispatch();
@@ -38,55 +39,71 @@ const AdminRegister = () => {
   }, [error]);
 
   return (
-    <div>
-      <div>
-        <div>
-          <div>
-            <h3>
-              <FaUserShield />
-              Регистрация администратора
-            </h3>
-          </div>
-          <div>
-            <form onSubmit={onSubmit}>
-              <div>
-                <label>Логин</label>
-                <div>
-                  <span>
-                    <FaUserPlus />
-                  </span>
-                  <input
-                    type="text"
-                    name="login"
-                    value={login}
-                    onChange={onChange}
-                    required
-                    placeholder="Введите логин"
-                  />
+    <div className="container mt-5">
+      <div className="row justify-content-center">
+        <div className="col-lg-6 col-md-8">
+          <div className="card shadow">
+            <div className="card-header bg-primary text-white text-center">
+              <h3>
+                <FaUserShield className="me-2" />
+                Регистрация администратора
+              </h3>
+            </div>
+            <div className="card-body">
+              <form onSubmit={onSubmit}>
+                {/* Логин */}
+                <div className="mb-3">
+                  <label className="form-label">Логин</label>
+                  <div className="input-group">
+                    <span className="input-group-text">
+                      <FaUserPlus />
+                    </span>
+                    <input
+                      type="text"
+                      name="login"
+                      value={login}
+                      onChange={onChange}
+                      className="form-control"
+                      required
+                      placeholder="Введите логин"
+                    />
+                  </div>
                 </div>
-              </div>
-              <div>
-                <label>Пароль</label>
-                <div>
-                  <span>
-                    <FaLock />
-                  </span>
-                  <input
-                    type="password"
-                    name="password"
-                    value={password}
-                    onChange={onChange}
-                    required
-                    placeholder="Введите пароль"
-                  />
+
+                {/* Пароль */}
+                <div className="mb-3">
+                  <label className="form-label">Пароль</label>
+                  <div className="input-group">
+                    <span className="input-group-text">
+                      <FaLock />
+                    </span>
+                    <input
+                      type="password"
+                      name="password"
+                      value={password}
+                      onChange={onChange}
+                      className="form-control"
+                      required
+                      placeholder="Введите пароль"
+                    />
+                  </div>
                 </div>
-              </div>
-              <div>
-                <button type="submit" disabled={loading}>
-                  {loading ? 'Регистрируем...' : 'Зарегистрироваться'}
-                </button>
-              </div>
-            </form>
+
+                {/* Кнопка отправки */}
+                <div className="d-grid">
+                  <button
+                    type="submit"
+                    className="btn btn-primary"
+                    disabled={loading}
+                  >
+                    {loading ? 'Регистрируем...' : 'Зарегистрироваться'}
+                  </button>
+                </div>
+              </form>
+
+              {/* Ошибки */}
+              {error && <p className="text-danger mt-3">{error}</p>}
+            </div>
           </div>
         </div>
       </div>

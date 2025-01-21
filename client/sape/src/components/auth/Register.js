@@ -4,6 +4,7 @@ import { registerUser } from '../../store/authSlice';
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { FaUserPlus, FaUser, FaLock } from 'react-icons/fa';
+import 'bootstrap/dist/css/bootstrap.min.css';
 
 const Register = () => {
     const dispatch = useDispatch();
@@ -23,10 +24,12 @@ const Register = () => {
     const onSubmit = async (e) => {
         e.preventDefault();
         try {
-            await dispatch(registerUser({
-                login,
-                password,
-            })).unwrap();
+            await dispatch(
+                registerUser({
+                    login,
+                    password,
+                })
+            ).unwrap();
             toast.success('Регистрация прошла успешно! Пожалуйста, войдите в систему.');
             navigate('/login');
         } catch (err) {
@@ -41,22 +44,20 @@ const Register = () => {
     }, [error]);
 
     return (
-        <div>
-            <div>
-                <div>
-                    <div>
-                        <h3>
-                            <FaUserPlus />
+        <div className="container mt-5">
+            <div className="row justify-content-center">
+                <div className="col-md-6">
+                    <div className="card shadow-lg p-4">
+                        <h3 className="text-center mb-4">
+                            <FaUserPlus className="me-2" />
                             Регистрация пользователя
                         </h3>
-                    </div>
-                    <div>
                         <form onSubmit={onSubmit}>
                             {/* Логин */}
-                            <div>
-                                <label>Логин:</label>
-                                <div>
-                                    <span>
+                            <div className="mb-3">
+                                <label className="form-label">Логин:</label>
+                                <div className="input-group">
+                                    <span className="input-group-text">
                                         <FaUser />
                                     </span>
                                     <input
@@ -66,15 +67,16 @@ const Register = () => {
                                         onChange={onChange}
                                         required
                                         placeholder="Введите логин"
+                                        className="form-control"
                                     />
                                 </div>
                             </div>
 
                             {/* Пароль */}
-                            <div>
-                                <label>Пароль:</label>
-                                <div>
-                                    <span>
+                            <div className="mb-3">
+                                <label className="form-label">Пароль:</label>
+                                <div className="input-group">
+                                    <span className="input-group-text">
                                         <FaLock />
                                     </span>
                                     <input
@@ -84,21 +86,23 @@ const Register = () => {
                                         onChange={onChange}
                                         required
                                         placeholder="Введите пароль"
+                                        className="form-control"
                                     />
                                 </div>
                             </div>
 
                             {/* Кнопка отправки */}
-                            <div>
+                            <div className="d-grid">
                                 <button
                                     type="submit"
+                                    className="btn btn-primary"
                                     disabled={loading}
                                 >
                                     {loading ? (
                                         'Регистрируем...'
                                     ) : (
                                         <>
-                                            <FaUserPlus />
+                                            <FaUserPlus className="me-2" />
                                             Зарегистрироваться
                                         </>
                                     )}

@@ -1,5 +1,3 @@
-// src/components/ChangePassword.js
-
 import React, { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { changeAdminPassword, changeUserPassword } from '../store/authSlice';
@@ -7,21 +5,17 @@ import { changeAdminPassword, changeUserPassword } from '../store/authSlice';
 const ChangePassword = () => {
     const dispatch = useDispatch();
 
-    // В auth хранится текущий пользователь, токен, ошибки и т.д.
     const { user, loading, error, passwordChangeSuccess } = useSelector(
         (state) => state.auth
     );
 
-    // Локальное состояние для формы
     const [formData, setFormData] = useState({
         currentPassword: '',
         newPassword: '',
     });
 
-    // Извлекаем данные из formData
     const { currentPassword, newPassword } = formData;
 
-    // Обработчик изменения инпутов
     const onChange = (e) => {
         setFormData((prevState) => ({
             ...prevState,
@@ -29,19 +23,15 @@ const ChangePassword = () => {
         }));
     };
 
-    // Хендлер отправки формы
     const onSubmit = async (e) => {
         e.preventDefault();
 
-        // Если в сторах нет информации о пользователе, 
-        // значит он не авторизован, и мы не можем менять пароль
         if (!user) {
             alert('Вы не авторизованы');
             return;
         }
 
         try {
-            // Если роль — администратор
             if (user.role === 'admin') {
                 await dispatch(
                     changeAdminPassword({
@@ -51,7 +41,6 @@ const ChangePassword = () => {
                     })
                 ).unwrap();
             } else {
-                // Иначе роль — пользователь
                 await dispatch(
                     changeUserPassword({
                         userId: user.id,
@@ -60,54 +49,53 @@ const ChangePassword = () => {
                     })
                 ).unwrap();
             }
-
-            // В этот момент пароль успешно сменён (если не было выброшено исключение)
-            // Вы можете дополнительно показать уведомление, например toast.success(...) 
-            // или просто использовать флаг passwordChangeSuccess.
-            // console.log('Пароль изменен успешно');
         } catch (err) {
-            // Если произошла ошибка, она обычно уже попадёт в state.error
-            // Но при желании можно как-то отдельно её отловить.
-            // console.error(err);
+            console.error(err);
         }
     };
 
     return (
-        <div>
-            <h2>Смена пароля</h2>
+        <div className="container mt-4">
+            <h2 className="mb-3">Смена пароля</h2>
 
-            <form onSubmit={onSubmit}>
-                <div>
+            <form onSubmit={onSubmit} className="card p-4">
+                <div className="form-group">
                     <label>Текущий пароль:</label>
                     <input
                         type="password"
                         name="currentPassword"
+                        className="form-control"
                         value={currentPassword}
                         onChange={onChange}
                         required
                     />
                 </div>
 
-                <div>
+                <div className="form-group">
                     <label>Новый пароль:</label>
                     <input
                         type="password"
                         name="newPassword"
+                        className="form-control"
                         value={newPassword}
                         onChange={onChange}
                         required
                     />
                 </div>
 
-                <button type="submit" disabled={loading}>
+                <button
+                    type="submit"
+                    className="btn btn-primary mt-3"
+                    disabled={loading}
+                >
                     {loading ? 'Сохраняем...' : 'Сменить пароль'}
                 </button>
             </form>
 
-            {/* Вывод ошибок или успеха */}
-            {error && <p style={{ color: 'red' }}>{error}</p>}
+            {/* Сообщения об успехе или ошибке */}
+            {error && <p className="text-danger mt-3">{error}</p>}
             {passwordChangeSuccess && (
-                <p style={{ color: 'green' }}>Пароль успешно изменён!</p>
+                <p className="text-success mt-3">Пароль успешно изменён!</p>
             )}
         </div>
     );
