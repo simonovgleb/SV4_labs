@@ -5,6 +5,6 @@ router.use('/contracts', require('./contractRouter'));
 router.use('/deliveries', require('./deliveryRouter'));
 router.use('/departments', require('./departmentRouter'));
 router.use('/employees', require('./employeeRouter'));
-router.use('/organiztions', require('./organizationRouter'));
+router.use('/organizations', require('./organizationRouter'));
 
 module.exports = router;

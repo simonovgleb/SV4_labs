@@ -1,5 +1,7 @@
 const { Op } = require('sequelize');
 const { Employee, Department } = require('../models/models');
+const path = require('path');
+const fs = require('fs');
 
 class EmployeeController {
     // 1) Создание новой записи
@@ -7,9 +9,13 @@ class EmployeeController {
         try {
             const { department_id, full_name, position, salary, bonus, month } = req.body;
 
-            // Проверка обязательных полей
             if (!full_name || !position || !salary || !month) {
                 return res.status(400).json({ message: 'Не все обязательные поля заполнены' });
+            }
+
+            let photoPath = null;
+            if (req.file) {  // Проверяем, был ли загружен файл
+                photoPath = `/uploads/${req.file.filename}`;
             }
 
             const employee = await Employee.create({
@@ -19,6 +25,7 @@ class EmployeeController {
                 salary,
                 bonus,
                 month,
+                photo: photoPath
             });
 
             return res.status(201).json(employee);
@@ -119,7 +126,6 @@ class EmployeeController {
                 return res.status(404).json({ message: 'Сотрудник не найден' });
             }
 
-            // Обновление полей
             employee.department_id = department_id !== undefined ? department_id : employee.department_id;
             employee.full_name = full_name || employee.full_name;
             employee.position = position || employee.position;
@@ -127,8 +133,18 @@ class EmployeeController {
             employee.bonus = bonus !== undefined ? bonus : employee.bonus;
             employee.month = month || employee.month;
 
-            await employee.save();
+            if (req.file) {
+                // Удаление старого фото, если оно существует
+                if (employee.photo) {
+                    const oldPhotoPath = path.join(__dirname, '..', employee.photo);
+                    fs.unlink(oldPhotoPath, err => {
+                        if (err) console.error('Ошибка при удалении старого фото:', err);
+                    });
+                }
+                employee.photo = `/uploads/${req.file.filename}`;
+            }
 
+            await employee.save();
             return res.json(employee);
         } catch (error) {
             console.error('Ошибка при обновлении сотрудника:', error);
