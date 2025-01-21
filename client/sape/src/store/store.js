@@ -4,6 +4,7 @@ import employeeReducer from './employeeSlice';
 import contractReducer from './contractSlice';
 import deliveryReducer from './deliverySlice';
 import organizationReducer from './organizationSlice';
+import authReducer from './authSlice';
 // Импортируйте другие редюсеры по мере необходимости
 
 const store = configureStore({
@@ -13,6 +14,7 @@ const store = configureStore({
         contracts: contractReducer,
         deliveries: deliveryReducer,
         organizations: organizationReducer,
+        auth: authReducer,
     },
 });
 

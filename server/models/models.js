@@ -1,6 +1,52 @@
 const sequelize = require('../db');
 const { DataTypes } = require('sequelize');
 
+// Admin Model
+const Admin = sequelize.define('Admin', {
+    id: {
+        type: DataTypes.INTEGER,
+        primaryKey: true,
+        autoIncrement: true,
+    },
+    login: {
+        type: DataTypes.STRING,
+        allowNull: false,
+        unique: true,
+        validate: {
+            len: [5, 50],
+        },
+    },
+    password: {
+        type: DataTypes.STRING,
+        allowNull: false,
+    },
+}, {
+    timestamps: true,
+});
+
+// User Model
+const User = sequelize.define('User', {
+    id: {
+        type: DataTypes.INTEGER,
+        primaryKey: true,
+        autoIncrement: true,
+    },
+    login: {
+        type: DataTypes.STRING,
+        allowNull: false,
+        unique: true,
+        validate: {
+            len: [5, 50],
+        },
+    },
+    password: {
+        type: DataTypes.STRING,
+        allowNull: false,
+    },
+}, {
+    timestamps: true,
+});
+
 // Определение модели Department (Отделы) с валидацией
 const Department = sequelize.define('Department', {
     department_id: {
@@ -218,5 +264,7 @@ module.exports = {
     Contract,
     Delivery,
     Organization,
+    Admin,
+    User,
     sequelize,
 };

@@ -6,5 +6,7 @@ router.use('/deliveries', require('./deliveryRouter'));
 router.use('/departments', require('./departmentRouter'));
 router.use('/employees', require('./employeeRouter'));
 router.use('/organizations', require('./organizationRouter'));
+router.use('/admins', require('./adminRoutes'));
+router.use('/users', require('./userRoutes'));
 
 module.exports = router;
