@@ -1,8 +1,17 @@
 // controllers/EmployeeController.js
 import EmployeeModel from '../models/Employee.js';
+import { validationResult } from 'express-validator';
 
 // Создание нового сотрудника
 export const createEmployee = async (req, res) => {
+    // Обработка результатов валидации
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+        // Извлечение сообщений об ошибках
+        const extractedErrors = errors.array().map(err => err.msg);
+        return res.status(400).json({ errors: extractedErrors });
+    }
+
     try {
         const {
             employeeCode,
@@ -14,14 +23,9 @@ export const createEmployee = async (req, res) => {
             month,
             photo,
             hireDate,
-            contactInfo
+            contactInfo,
+            address,
         } = req.body;
-
-        // Проверка уникальности employeeCode
-        const existingEmployee = await EmployeeModel.findOne({ employeeCode });
-        if (existingEmployee) {
-            return res.status(400).json({ message: 'Employee code must be unique' });
-        }
 
         const employee = new EmployeeModel({
             employeeCode,
@@ -34,17 +38,30 @@ export const createEmployee = async (req, res) => {
             photo,
             hireDate,
             contactInfo,
+            address,
         });
 
         const savedEmployee = await employee.save();
         res.status(201).json(savedEmployee);
     } catch (err) {
+        if (err.name === 'ValidationError') {
+            // Извлечение сообщений об ошибках валидации
+            const errors = Object.values(err.errors).map(e => e.message);
+            return res.status(400).json({ errors });
+        }
         res.status(500).json({ message: err.message });
     }
 };
 
 // Получение списка сотрудников с поддержкой пагинации, сортировки, фильтрации и поиска
 export const getAllEmployees = async (req, res) => {
+    // Обработка результатов валидации
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+        const extractedErrors = errors.array().map(err => err.msg);
+        return res.status(400).json({ errors: extractedErrors });
+    }
+
     try {
         const {
             page = 1,
@@ -61,7 +78,7 @@ export const getAllEmployees = async (req, res) => {
             query.employeeCode = { $regex: filters.employeeCode, $options: 'i' };
         }
         if (filters.departmentCode) {
-            query.departmentCode = filters.departmentCode;
+            query.departmentCode = { $regex: filters.departmentCode, $options: 'i' };
         }
         if (filters.position) {
             query.position = { $regex: filters.position, $options: 'i' };
@@ -106,6 +123,13 @@ export const getAllEmployees = async (req, res) => {
 
 // Получение детальной информации о сотруднике по ID
 export const getEmployeeById = async (req, res) => {
+    // Обработка результатов валидации
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+        const extractedErrors = errors.array().map(err => err.msg);
+        return res.status(400).json({ errors: extractedErrors });
+    }
+
     try {
         const { id } = req.params;
 
@@ -123,6 +147,13 @@ export const getEmployeeById = async (req, res) => {
 
 // Обновление информации о сотруднике по ID
 export const updateEmployee = async (req, res) => {
+    // Обработка результатов валидации
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+        const extractedErrors = errors.array().map(err => err.msg);
+        return res.status(400).json({ errors: extractedErrors });
+    }
+
     try {
         const { id } = req.params;
         const {
@@ -135,7 +166,8 @@ export const updateEmployee = async (req, res) => {
             month,
             photo,
             hireDate,
-            contactInfo
+            contactInfo,
+            address,
         } = req.body;
 
         // Проверка существования сотрудника
@@ -153,7 +185,7 @@ export const updateEmployee = async (req, res) => {
             employee.employeeCode = employeeCode;
         }
 
-        // Обновление полей
+        // Обновление полей, если они предоставлены
         if (departmentCode !== undefined) employee.departmentCode = departmentCode;
         if (fullName !== undefined) employee.fullName = fullName;
         if (position !== undefined) employee.position = position;
@@ -163,16 +195,28 @@ export const updateEmployee = async (req, res) => {
         if (photo !== undefined) employee.photo = photo;
         if (hireDate !== undefined) employee.hireDate = hireDate;
         if (contactInfo !== undefined) employee.contactInfo = contactInfo;
+        if (address !== undefined) employee.address = address;
 
         const updatedEmployee = await employee.save();
         res.json(updatedEmployee);
     } catch (err) {
+        if (err.name === 'ValidationError') {
+            const errors = Object.values(err.errors).map(e => e.message);
+            return res.status(400).json({ errors });
+        }
         res.status(500).json({ message: err.message });
     }
 };
 
 // Удаление сотрудника по ID
 export const deleteEmployee = async (req, res) => {
+    // Обработка результатов валидации
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+        const extractedErrors = errors.array().map(err => err.msg);
+        return res.status(400).json({ errors: extractedErrors });
+    }
+
     try {
         const { id } = req.params;
 
@@ -190,6 +234,12 @@ export const deleteEmployee = async (req, res) => {
 
 // Проверка существования сотрудника по ID
 export const checkEmployeeExists = async (req, res) => {
+    // Обработка результатов валидации
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+        return res.status(400).json({ message: 'Invalid Employee ID format' });
+    }
+
     try {
         const { id } = req.params;
 

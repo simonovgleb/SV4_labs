@@ -4,19 +4,16 @@ import DeliveryModel from '../models/Delivery.js';
 // Создание новой поставки (договора)
 export const createDelivery = async (req, res) => {
     try {
-        const { contractNumber, equipmentType, userComment, employeeId, organizationId, deliveryDate } = req.body;
-
-        // Проверка существования связей
-        const employeeExists = await DeliveryModel.db.db.collection('employees').findOne({ _id: employeeId });
-        const organizationExists = await DeliveryModel.db.db.collection('organizations').findOne({ _id: organizationId });
-
-        if (!employeeExists) {
-            return res.status(400).json({ message: 'Employee not found' });
-        }
-
-        if (!organizationExists) {
-            return res.status(400).json({ message: 'Organization not found' });
-        }
+        const {
+            contractNumber,
+            equipmentType,
+            userComment,
+            employeeId,
+            organizationId,
+            deliveryDate,
+            notes,
+            status,
+        } = req.body;
 
         const delivery = new DeliveryModel({
             contractNumber,
@@ -25,11 +22,18 @@ export const createDelivery = async (req, res) => {
             employeeId,
             organizationId,
             deliveryDate,
+            notes,
+            status,
         });
 
         const savedDelivery = await delivery.save();
         res.status(201).json(savedDelivery);
     } catch (err) {
+        if (err.name === 'ValidationError') {
+            // Извлечение сообщений об ошибках валидации
+            const errors = Object.values(err.errors).map(e => e.message);
+            return res.status(400).json({ errors });
+        }
         if (err.code === 11000) { // Ошибка дублирования
             res.status(400).json({ message: 'Contract number must be unique' });
         } else {
@@ -41,7 +45,7 @@ export const createDelivery = async (req, res) => {
 // Получение списка поставок с поддержкой пагинации, сортировки, фильтрации и поиска
 export const getAllDeliveries = async (req, res) => {
     try {
-        const { page = 1, limit = 10, sortBy = 'createdAt', order = 'asc', ...filters } = req.query;
+        const { page = 1, limit = 10, sortBy = 'deliveryDate', order = 'desc', ...filters } = req.query;
 
         // Формирование условия фильтрации
         const query = {};
@@ -59,12 +63,17 @@ export const getAllDeliveries = async (req, res) => {
         if (filters.organizationId) {
             query.organizationId = filters.organizationId;
         }
+        if (filters.status) {
+            query.status = filters.status;
+        }
 
         // Поддержка поиска по нескольким полям (например, contractNumber и equipmentType)
         if (filters.search) {
             query.$or = [
                 { contractNumber: { $regex: filters.search, $options: 'i' } },
                 { equipmentType: { $regex: filters.search, $options: 'i' } },
+                { 'employeeId.fullName': { $regex: filters.search, $options: 'i' } },
+                { 'organizationId.name': { $regex: filters.search, $options: 'i' } },
             ];
         }
 
@@ -101,8 +110,8 @@ export const getDeliveryById = async (req, res) => {
         const { id } = req.params;
 
         const delivery = await DeliveryModel.findById(id)
-            .populate('employeeId', 'fullName position')
-            .populate('organizationId', 'name country city');
+            .populate('employeeId', 'fullName position departmentCode')
+            .populate('organizationId', 'name country city address');
 
         if (!delivery) {
             return res.status(404).json({ message: 'Delivery not found' });
@@ -118,25 +127,40 @@ export const getDeliveryById = async (req, res) => {
 export const updateDelivery = async (req, res) => {
     try {
         const { id } = req.params;
-        const { contractNumber, equipmentType, userComment, employeeId, organizationId, deliveryDate } = req.body;
+        const {
+            contractNumber,
+            equipmentType,
+            userComment,
+            employeeId,
+            organizationId,
+            deliveryDate,
+            notes,
+            status,
+        } = req.body;
 
-        // Проверка существования записи
+        // Поиск и обновление документа
         const delivery = await DeliveryModel.findById(id);
         if (!delivery) {
             return res.status(404).json({ message: 'Delivery not found' });
         }
 
-        // Обновление полей
+        // Обновление полей, если они предоставлены
         if (contractNumber !== undefined) delivery.contractNumber = contractNumber;
         if (equipmentType !== undefined) delivery.equipmentType = equipmentType;
         if (userComment !== undefined) delivery.userComment = userComment;
         if (employeeId !== undefined) delivery.employeeId = employeeId;
         if (organizationId !== undefined) delivery.organizationId = organizationId;
         if (deliveryDate !== undefined) delivery.deliveryDate = deliveryDate;
+        if (notes !== undefined) delivery.notes = notes;
+        if (status !== undefined) delivery.status = status;
 
         const updatedDelivery = await delivery.save();
         res.json(updatedDelivery);
     } catch (err) {
+        if (err.name === 'ValidationError') {
+            const errors = Object.values(err.errors).map(e => e.message);
+            return res.status(400).json({ errors });
+        }
         if (err.code === 11000) { // Ошибка дублирования
             res.status(400).json({ message: 'Contract number must be unique' });
         } else {

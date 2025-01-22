@@ -1,8 +1,17 @@
 // controllers/OrganizationController.js
 import OrganizationModel from '../models/Organization.js';
+import { validationResult } from 'express-validator';
 
 // Создание новой организации
 export const createOrganization = async (req, res) => {
+    // Обработка результатов валидации
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+        // Извлечение сообщений об ошибках
+        const extractedErrors = errors.array().map(err => err.msg);
+        return res.status(400).json({ errors: extractedErrors });
+    }
+
     try {
         const {
             organizationCode,
@@ -13,14 +22,9 @@ export const createOrganization = async (req, res) => {
             address,
             phone,
             email,
-            website
+            website,
+            description
         } = req.body;
-
-        // Проверка уникальности organizationCode
-        const existingOrganization = await OrganizationModel.findOne({ organizationCode });
-        if (existingOrganization) {
-            return res.status(400).json({ message: 'Organization code must be unique' });
-        }
 
         const organization = new OrganizationModel({
             organizationCode,
@@ -32,17 +36,30 @@ export const createOrganization = async (req, res) => {
             phone,
             email,
             website,
+            description,
         });
 
         const savedOrganization = await organization.save();
         res.status(201).json(savedOrganization);
     } catch (err) {
+        if (err.name === 'ValidationError') {
+            // Извлечение сообщений об ошибках валидации
+            const errors = Object.values(err.errors).map(e => e.message);
+            return res.status(400).json({ errors });
+        }
         res.status(500).json({ message: err.message });
     }
 };
 
 // Получение списка организаций с поддержкой пагинации, сортировки, фильтрации и поиска
 export const getAllOrganizations = async (req, res) => {
+    // Обработка результатов валидации
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+        const extractedErrors = errors.array().map(err => err.msg);
+        return res.status(400).json({ errors: extractedErrors });
+    }
+
     try {
         const {
             page = 1,
@@ -105,6 +122,13 @@ export const getAllOrganizations = async (req, res) => {
 
 // Получение детальной информации об организации по ID
 export const getOrganizationById = async (req, res) => {
+    // Обработка результатов валидации
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+        const extractedErrors = errors.array().map(err => err.msg);
+        return res.status(400).json({ errors: extractedErrors });
+    }
+
     try {
         const { id } = req.params;
 
@@ -122,6 +146,13 @@ export const getOrganizationById = async (req, res) => {
 
 // Обновление информации об организации по ID
 export const updateOrganization = async (req, res) => {
+    // Обработка результатов валидации
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+        const extractedErrors = errors.array().map(err => err.msg);
+        return res.status(400).json({ errors: extractedErrors });
+    }
+
     try {
         const { id } = req.params;
         const {
@@ -133,7 +164,8 @@ export const updateOrganization = async (req, res) => {
             address,
             phone,
             email,
-            website
+            website,
+            description
         } = req.body;
 
         // Проверка существования организации
@@ -151,7 +183,7 @@ export const updateOrganization = async (req, res) => {
             organization.organizationCode = organizationCode;
         }
 
-        // Обновление полей
+        // Обновление полей, если они предоставлены
         if (name !== undefined) organization.name = name;
         if (contractDate !== undefined) organization.contractDate = contractDate;
         if (country !== undefined) organization.country = country;
@@ -160,16 +192,28 @@ export const updateOrganization = async (req, res) => {
         if (phone !== undefined) organization.phone = phone;
         if (email !== undefined) organization.email = email;
         if (website !== undefined) organization.website = website;
+        if (description !== undefined) organization.description = description;
 
         const updatedOrganization = await organization.save();
         res.json(updatedOrganization);
     } catch (err) {
+        if (err.name === 'ValidationError') {
+            const errors = Object.values(err.errors).map(e => e.message);
+            return res.status(400).json({ errors });
+        }
         res.status(500).json({ message: err.message });
     }
 };
 
 // Удаление организации по ID
 export const deleteOrganization = async (req, res) => {
+    // Обработка результатов валидации
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+        const extractedErrors = errors.array().map(err => err.msg);
+        return res.status(400).json({ errors: extractedErrors });
+    }
+
     try {
         const { id } = req.params;
 
@@ -187,6 +231,12 @@ export const deleteOrganization = async (req, res) => {
 
 // Проверка существования организации по ID
 export const checkOrganizationExists = async (req, res) => {
+    // Обработка результатов валидации
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+        return res.status(400).json({ message: 'Invalid Organization ID format' });
+    }
+
     try {
         const { id } = req.params;
 
