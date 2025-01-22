@@ -16,7 +16,7 @@ const EQUIPMENT_TYPES = [
 // Регулярное выражение для проверки формата номера контракта
 const CONTRACT_NUMBER_REGEX = /^CONTRACT-\d{4}-\d{2}$/;
 
-// Регулярное выражение для проверки URL (можно настроить по требованиям)
+// Регулярное выражение для проверки URL 
 const URL_REGEX = /^(https?:\/\/)?([\w-]+\.)+[\w-]{2,4}\/?$/i;
 
 const DeliverySchema = new Schema({
@@ -78,7 +78,6 @@ const DeliverySchema = new Schema({
             message: 'Delivery date cannot be in the future',
         },
     },
-    // Дополнительные поля при необходимости
     notes: {
         type: String,
         trim: true,
@@ -96,10 +95,8 @@ const DeliverySchema = new Schema({
     timestamps: true,
 });
 
-// Применение плагина для валидации уникальности
 DeliverySchema.plugin(uniqueValidator, { message: '{PATH} must be unique.' });
 
-// Индексы для оптимизации поиска и сортировки
 DeliverySchema.index({ contractNumber: 1 });
 DeliverySchema.index({ equipmentType: 1 });
 DeliverySchema.index({ deliveryDate: -1 });

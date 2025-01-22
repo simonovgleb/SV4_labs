@@ -394,8 +394,11 @@ const EmployeeManager = () => {
                     'Content-Type': 'multipart/form-data',
                 },
             });
-            // response.data.url содержит путь к загруженному файлу
-            setFormData((prev) => ({ ...prev, photo: response.data.url }));
+            // response.data.url содержит ПУТЬ, например "/uploads/4FrBrOiLjrA.png"
+            // Для прохождения схемы нужна полная ссылка:
+            const fullUrl = `http://localhost:4444${response.data.url}`;
+
+            setFormData((prev) => ({ ...prev, photo: fullUrl }));
             setErrors((prev) => ({ ...prev, photo: '' }));
             alert('Фото успешно загружено!');
         } catch (err) {
@@ -846,7 +849,7 @@ const EmployeeManager = () => {
                                     <div className="col-md-4 text-center">
                                         {currentItem.photo ? (
                                             <img
-                                                src={`http://localhost:4444${currentItem.photo}`}
+                                                src={currentItem.photo}
                                                 alt="Employee"
                                                 className="img-fluid rounded mb-3"
                                             />

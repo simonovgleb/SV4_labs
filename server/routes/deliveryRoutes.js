@@ -11,7 +11,7 @@ import {
 
 const router = express.Router();
 
-// Создание новой поставки (договора)
+// Создание новой поставки
 router.post('/', createDelivery);
 
 // Получение списка поставок с поддержкой пагинации, сортировки, фильтрации и поиска
@@ -26,7 +26,7 @@ router.get('/:id', getDeliveryById);
 // Обновление поставки по ID
 router.put('/:id', updateDelivery);
 
-// Частичное обновление поставки по ID (если необходимо)
+// Частичное обновление поставки по ID 
 router.patch('/:id', updateDelivery);
 
 // Удаление поставки по ID

@@ -13,7 +13,7 @@ const PHONE_REGEX = /^\+7\s\(\d{3}\)\s\d{3}-\d{2}-\d{2}$/;
 // Регулярное выражение для проверки email
 const EMAIL_REGEX = /.+\@.+\..+/;
 
-// Регулярное выражение для проверки URL (можно настроить по требованиям)
+// Регулярное выражение для проверки URL 
 const URL_REGEX = /^(https?:\/\/)?([\w-]+\.)+[\w-]{2,4}\/?$/i;
 
 const OrganizationSchema = new Schema({
@@ -82,7 +82,6 @@ const OrganizationSchema = new Schema({
             message: 'Invalid website URL',
         },
     },
-    // Дополнительные поля при необходимости
     description: {
         type: String,
         trim: true,
@@ -92,10 +91,8 @@ const OrganizationSchema = new Schema({
     timestamps: true,
 });
 
-// Применение плагина для валидации уникальности
 OrganizationSchema.plugin(uniqueValidator, { message: '{PATH} must be unique.' });
 
-// Индексы для оптимизации поиска и сортировки
 OrganizationSchema.index({ organizationCode: 1 });
 OrganizationSchema.index({ name: 1 });
 OrganizationSchema.index({ country: 1 });

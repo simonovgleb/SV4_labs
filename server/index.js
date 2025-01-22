@@ -41,9 +41,9 @@ app.post('/upload', upload.single('image'), (req, res) => {
 });
 
 // Подключение маршрутов API
-app.use('/api/employees', employeeRoutes);
-app.use('/api/organizations', organizationRoutes);
-app.use('/api/deliveries', deliveryRoutes);
+app.use('/employees', employeeRoutes);
+app.use('/organizations', organizationRoutes);
+app.use('/deliveries', deliveryRoutes);
 
 // Обработка ошибок (опционально)
 app.use((err, req, res, next) => {

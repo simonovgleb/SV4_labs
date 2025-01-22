@@ -8,6 +8,8 @@ import {
     updateDelivery,
     deleteDelivery,
 } from '../../redux/slices/deliverySlice';
+import { fetchEmployees } from '../../redux/slices/employeeSlice'; // Импорт действия для загрузки сотрудников
+import { fetchOrganizations } from '../../redux/slices/organizationSlice'; // Импорт действия для загрузки организаций
 import { useNavigate } from 'react-router-dom';
 
 // Импортируем стили Bootstrap прямо в компонент (не рекомендуется для реального проекта)
@@ -26,6 +28,8 @@ const DeliveryManager = () => {
     const dispatch = useDispatch();
     const navigate = useNavigate();
     const { items, currentItem, status, error } = useSelector((state) => state.deliveries);
+    const { items: employees, status: employeesStatus, error: employeesError } = useSelector((state) => state.employees);
+    const { items: organizations, status: organizationsStatus, error: organizationsError } = useSelector((state) => state.organizations);
 
     // Локальное состояние для управления режимом компонента
     const [mode, setMode] = useState('list'); // 'list' | 'create' | 'edit' | 'detail'
@@ -46,9 +50,11 @@ const DeliveryManager = () => {
     // Локальное состояние для ошибок валидации
     const [errors, setErrors] = useState({});
 
-    // Эффект для загрузки списка поставок при монтировании
+    // Эффект для загрузки списка поставок, сотрудников и организаций при монтировании
     useEffect(() => {
         dispatch(fetchDeliveries());
+        dispatch(fetchEmployees());
+        dispatch(fetchOrganizations());
     }, [dispatch]);
 
     // Эффект для загрузки деталей поставки при переключении в режим 'detail' или 'edit'
@@ -351,13 +357,15 @@ const DeliveryManager = () => {
                         <button className="btn btn-primary mb-3" onClick={handleCreate}>
                             Добавить поставку
                         </button>
-                        {status === 'loading' && <p>Загрузка...</p>}
-                        {status === 'failed' && (
-                            <p className="text-danger">Ошибка: {error}</p>
+                        {(status === 'loading' || employeesStatus === 'loading' || organizationsStatus === 'loading') && <p>Загрузка...</p>}
+                        {(status === 'failed' || employeesStatus === 'failed' || organizationsStatus === 'failed') && (
+                            <div className="alert alert-danger" role="alert">
+                                {error || employeesError || organizationsError}
+                            </div>
                         )}
-                        {status === 'succeeded' && (
+                        {status === 'succeeded' && employeesStatus === 'succeeded' && organizationsStatus === 'succeeded' && (
                             <table className="table table-bordered table-hover">
-                                <thead>
+                                <thead className="table-light">
                                     <tr>
                                         <th>Номер контракта</th>
                                         <th>Тип оборудования</th>
@@ -419,7 +427,7 @@ const DeliveryManager = () => {
                                 <input
                                     type="text"
                                     name="contractNumber"
-                                    className="form-control"
+                                    className={`form-control ${errors.contractNumber ? 'is-invalid' : ''}`}
                                     value={formData.contractNumber}
                                     onChange={handleChange}
                                     required
@@ -436,7 +444,7 @@ const DeliveryManager = () => {
                                 <label className="form-label">Тип оборудования:</label>
                                 <select
                                     name="equipmentType"
-                                    className="form-select"
+                                    className={`form-select ${errors.equipmentType ? 'is-invalid' : ''}`}
                                     value={formData.equipmentType}
                                     onChange={handleChange}
                                     required
@@ -452,28 +460,40 @@ const DeliveryManager = () => {
                             </div>
 
                             <div className="col-12 col-md-6">
-                                <label className="form-label">Employee ID:</label>
-                                <input
-                                    type="text"
+                                <label className="form-label">Employee:</label>
+                                <select
                                     name="employeeId"
-                                    className="form-control"
+                                    className={`form-select ${errors.employeeId ? 'is-invalid' : ''}`}
                                     value={formData.employeeId}
                                     onChange={handleChange}
                                     required
-                                />
+                                >
+                                    <option value="">Выберите сотрудника</option>
+                                    {employees.map((emp) => (
+                                        <option key={emp._id} value={emp._id}>
+                                            {emp.fullName} ({emp.employeeCode})
+                                        </option>
+                                    ))}
+                                </select>
                                 {renderError('employeeId')}
                             </div>
 
                             <div className="col-12 col-md-6">
-                                <label className="form-label">Organization ID:</label>
-                                <input
-                                    type="text"
+                                <label className="form-label">Organization:</label>
+                                <select
                                     name="organizationId"
-                                    className="form-control"
+                                    className={`form-select ${errors.organizationId ? 'is-invalid' : ''}`}
                                     value={formData.organizationId}
                                     onChange={handleChange}
                                     required
-                                />
+                                >
+                                    <option value="">Выберите организацию</option>
+                                    {organizations.map((org) => (
+                                        <option key={org._id} value={org._id}>
+                                            {org.name} ({org.organizationCode})
+                                        </option>
+                                    ))}
+                                </select>
                                 {renderError('organizationId')}
                             </div>
 
@@ -482,7 +502,7 @@ const DeliveryManager = () => {
                                 <input
                                     type="date"
                                     name="deliveryDate"
-                                    className="form-control"
+                                    className={`form-control ${errors.deliveryDate ? 'is-invalid' : ''}`}
                                     value={formData.deliveryDate}
                                     onChange={handleChange}
                                 />
@@ -493,7 +513,7 @@ const DeliveryManager = () => {
                                 <label className="form-label">Статус:</label>
                                 <select
                                     name="status"
-                                    className="form-select"
+                                    className={`form-select ${errors.status ? 'is-invalid' : ''}`}
                                     value={formData.status}
                                     onChange={handleChange}
                                 >
@@ -508,7 +528,7 @@ const DeliveryManager = () => {
                                 <label className="form-label">Комментарий пользователя:</label>
                                 <textarea
                                     name="userComment"
-                                    className="form-control"
+                                    className={`form-control ${errors.userComment ? 'is-invalid' : ''}`}
                                     value={formData.userComment}
                                     onChange={handleChange}
                                     maxLength={500}
@@ -523,7 +543,7 @@ const DeliveryManager = () => {
                                 <label className="form-label">Заметки:</label>
                                 <textarea
                                     name="notes"
-                                    className="form-control"
+                                    className={`form-control ${errors.notes ? 'is-invalid' : ''}`}
                                     value={formData.notes}
                                     onChange={handleChange}
                                     maxLength={1000}
@@ -558,10 +578,14 @@ const DeliveryManager = () => {
                 return (
                     <div>
                         <h2>Детали поставки</h2>
-                        {status === 'loading' && <p>Загрузка...</p>}
-                        {status === 'failed' && <p className="text-danger">Ошибка: {error}</p>}
-                        {status === 'succeeded' && currentItem && (
-                            <div className="card p-3">
+                        {(status === 'loading' || employeesStatus === 'loading' || organizationsStatus === 'loading') && <p>Загрузка...</p>}
+                        {(status === 'failed' || employeesStatus === 'failed' || organizationsStatus === 'failed') && (
+                            <div className="alert alert-danger" role="alert">
+                                {error || employeesError || organizationsError}
+                            </div>
+                        )}
+                        {status === 'succeeded' && currentItem && employeesStatus === 'succeeded' && organizationsStatus === 'succeeded' && (
+                            <div className="card p-4">
                                 <p>
                                     <strong>Номер контракта:</strong> {currentItem.contractNumber}
                                 </p>
@@ -572,16 +596,13 @@ const DeliveryManager = () => {
                                     <strong>Комментарий:</strong> {currentItem.userComment || '—'}
                                 </p>
                                 <p>
-                                    <strong>Employee ID:</strong>{' '}
-                                    {currentItem.employeeId?._id || currentItem.employeeId}
+                                    <strong>Сотрудник:</strong> {currentItem.employeeId?.fullName} 
                                 </p>
                                 <p>
-                                    <strong>Organization ID:</strong>{' '}
-                                    {currentItem.organizationId?._id || currentItem.organizationId}
+                                    <strong>Организация:</strong> {currentItem.organizationId?.name} 
                                 </p>
                                 <p>
-                                    <strong>Дата поставки:</strong>{' '}
-                                    {currentItem.deliveryDate
+                                    <strong>Дата поставки:</strong> {currentItem.deliveryDate
                                         ? new Date(currentItem.deliveryDate).toLocaleDateString()
                                         : '—'}
                                 </p>
@@ -614,6 +635,17 @@ const DeliveryManager = () => {
             default:
                 return null;
         }
+    };
+
+    // Вспомогательные функции для получения имен сотрудника и организации по их ID
+    const getEmployeeName = (employeeId) => {
+        const employee = employees.find((emp) => emp._id === employeeId);
+        return employee ? `${employee.fullName} (${employee.employeeCode})` : '—';
+    };
+
+    const getOrganizationName = (organizationId) => {
+        const organization = organizations.find((org) => org._id === organizationId);
+        return organization ? `${organization.name} (${organization.organizationCode})` : '—';
     };
 
     return (

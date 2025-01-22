@@ -26,7 +26,7 @@ router.get('/:id', getOrganizationById);
 // Обновление информации об организации по ID
 router.put('/:id', updateOrganization);
 
-// Частичное обновление информации об организации по ID (если необходимо)
+// Частичное обновление информации об организации по ID 
 router.patch('/:id', updateOrganization);
 
 // Удаление организации по ID

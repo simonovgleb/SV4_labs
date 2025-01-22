@@ -4,8 +4,8 @@ import uniqueValidator from 'mongoose-unique-validator';
 
 const { Schema } = mongoose;
 
-// Регулярное выражение для проверки URL (можно настроить по требованиям)
-const URL_REGEX = /^(https?:\/\/.*\.(?:png|jpg|jpeg|gif|svg))$/i;
+// Регулярное выражение для проверки URL
+const URL_REGEX = /(^\/uploads\/.*\.(png|jpg|jpeg|gif|svg)$)|(^(https?:\/\/).*\.(png|jpg|jpeg|gif|svg)$)/i;
 
 // Регулярное выражение для проверки формата телефонного номера
 const PHONE_REGEX = /^\+7\s\(\d{3}\)\s\d{3}-\d{2}-\d{2}$/;
@@ -61,7 +61,7 @@ const EmployeeSchema = new Schema({
         max: [12, 'Month must be between 1 and 12'],
     },
     photo: {
-        type: String, // URL или путь к файлу изображения
+        type: String, 
         default: '',
         trim: true,
         validate: {
@@ -93,22 +93,18 @@ const EmployeeSchema = new Schema({
             required: [true, 'Email is required'],
             match: [EMAIL_REGEX, 'Please enter a valid email'],
         },
-        // Другие контактные данные при необходимости
         address: {
             type: String,
             trim: true,
             maxlength: [200, 'Address cannot exceed 200 characters'],
         },
-        // Например, можно добавить поле skype или другие контакты
     },
 }, {
     timestamps: true,
 });
 
-// Применение плагина для валидации уникальности
 EmployeeSchema.plugin(uniqueValidator, { message: '{PATH} must be unique.' });
 
-// Индексы для оптимизации поиска и сортировки
 EmployeeSchema.index({ employeeCode: 1 });
 EmployeeSchema.index({ departmentCode: 1 });
 EmployeeSchema.index({ fullName: 1 });
